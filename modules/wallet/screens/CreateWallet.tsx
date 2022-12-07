@@ -2,10 +2,14 @@
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import React from 'react';
 
-import Button from '@modules/wallet/components/Button';
-import { createEIP155Wallet } from '@modules/shared/utils/EIP155WalletUtil';
+import Button from '@modules/shared/components/Button';
+import useSettings from '@modules/shared/hooks/useSettings';
 
 const CreateWallet = () => {
+  const state = useSettings();
+
+  console.log({ state });
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -21,13 +25,7 @@ const CreateWallet = () => {
           placeholder="Input Mnemonic phrase"
         />
       </View>
-      <Button
-        text="Import Wallet"
-        onPress={async () => {
-          const wallet = await createEIP155Wallet();
-          console.log(JSON.stringify(wallet, null, 2));
-        }}
-      />
+      <Button text="Import Wallet" />
     </ScrollView>
   );
 };

@@ -12,6 +12,7 @@ module.exports = {
         root: ['./'],
         alias: {
           '@modules': './modules',
+          // '@ethersproject/pbkdf2': './modules/shared/lib/pbdkf2.js',
         },
         extensions: [
           '.ios.ts',
@@ -30,6 +31,7 @@ module.exports = {
           '.native.tsx',
         ],
       },
+      '@babel/plugin-syntax-dynamic-import',
     ],
   ],
 };

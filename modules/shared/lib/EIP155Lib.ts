@@ -1,4 +1,4 @@
-import { providers, type TypedDataDomain, Wallet } from 'ethers';
+import { providers, Wallet } from 'ethers';
 
 /**
  * Types
@@ -17,13 +17,13 @@ export default class EIP155Lib {
     this.wallet = wallet;
   }
 
-  static createWallet() {
-    const wallet = Wallet.createRandom();
-    return new EIP155Lib(wallet);
-  }
-
-  static importWallet({ mnemonic }: IInitArgs) {
-    const wallet = Wallet.fromMnemonic(mnemonic);
+  static init({ mnemonic }: IInitArgs) {
+    const start = performance.now();
+    const wallet = mnemonic
+      ? Wallet.fromMnemonic(mnemonic)
+      : Wallet.createRandom();
+    const end = performance.now();
+    console.log(`Creating a Wallet took ${end - start} ms.`);
     return new EIP155Lib(wallet);
   }
 
@@ -39,7 +39,7 @@ export default class EIP155Lib {
     return this.wallet.signMessage(message);
   }
 
-  _signTypedData(domain: TypedDataDomain, types: any, data: any) {
+  _signTypedData(domain: any, types: any, data: any) {
     return this.wallet._signTypedData(domain, types, data);
   }
 

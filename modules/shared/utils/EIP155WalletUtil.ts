@@ -7,16 +7,20 @@ export let eip155Addresses: string[];
 
 let address1: string;
 
-const KEIP155_MNEMONIC = 'EIP155_MNEMONIC';
-
 /**
- * Create Wallet
+ * Utilities
  */
-export async function createEIP155Wallet() {
-  wallet1 = EIP155Lib.createWallet();
+export async function createOrRestoreEIP155Wallet() {
+  const mnemonic1 = await AsyncStorage.getItem('EIP155_MNEMONIC_1');
 
-  // Don't store mnemonic in local storage in a production project!
-  await AsyncStorage.setItem(KEIP155_MNEMONIC, wallet1.getMnemonic());
+  if (mnemonic1) {
+    wallet1 = EIP155Lib.init({ mnemonic: mnemonic1 });
+  } else {
+    wallet1 = EIP155Lib.init({});
+
+    // Don't store mnemonic in local storage in a production project!
+    await AsyncStorage.setItem('EIP155_MNEMONIC_1', wallet1.getMnemonic());
+  }
 
   address1 = wallet1.getAddress();
 
@@ -29,28 +33,4 @@ export async function createEIP155Wallet() {
     eip155Wallets,
     eip155Addresses,
   };
-}
-
-/**
- * Restore Wallet
- */
-export async function restoreEIP155Wallet() {
-  const mnemonic1 = await AsyncStorage.getItem(KEIP155_MNEMONIC);
-
-  if (mnemonic1) {
-    wallet1 = EIP155Lib.importWallet({ mnemonic: mnemonic1 });
-    address1 = wallet1.getAddress();
-
-    eip155Wallets = {
-      [address1]: wallet1,
-    };
-    eip155Addresses = Object.keys(eip155Wallets);
-
-    return {
-      eip155Wallets,
-      eip155Addresses,
-    };
-  }
-
-  return null;
 }
