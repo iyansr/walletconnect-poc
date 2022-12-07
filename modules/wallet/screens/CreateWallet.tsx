@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import React from 'react';
 
 import Button from '@modules/wallet/components/Button';
+import { createEIP155Wallet } from '@modules/shared/utils/EIP155WalletUtil';
 
 const CreateWallet = () => {
   return (
@@ -20,7 +21,13 @@ const CreateWallet = () => {
           placeholder="Input Mnemonic phrase"
         />
       </View>
-      <Button text="Import Wallet" />
+      <Button
+        text="Import Wallet"
+        onPress={async () => {
+          const wallet = await createEIP155Wallet();
+          console.log(JSON.stringify(wallet, null, 2));
+        }}
+      />
     </ScrollView>
   );
 };
@@ -43,6 +50,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     width: '100%',
     textAlignVertical: 'top',
+    minHeight: 100,
   },
 });
 
